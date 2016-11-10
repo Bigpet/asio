@@ -115,7 +115,6 @@ context::context(context::method m)
   case context::tlsv1_server:
     handle_ = ::SSL_CTX_new(::TLSv1_server_method());
     break;
-#endif // (OPENSSL_VERSION_NUMBER < 0x10100000L)
   case context::sslv23:
     handle_ = ::SSL_CTX_new(::SSLv23_method());
     break;
@@ -125,7 +124,6 @@ context::context(context::method m)
   case context::sslv23_server:
     handle_ = ::SSL_CTX_new(::SSLv23_server_method());
     break;
-#if (OPENSSL_VERSION_NUMBER < 0x10100000L)
 #if defined(SSL_TXT_TLSV1_1)
   case context::tlsv11:
     handle_ = ::SSL_CTX_new(::TLSv1_1_method());
@@ -163,20 +161,59 @@ context::context(context::method m)
     break;
 #endif // defined(SSL_TXT_TLSV1_2) 
 #else // (OPENSSL_VERSION_NUMBER < 0x10100000L)
-  case context::tlsv1:
-  case context::tlsv11:
-  case context::tlsv12:
+  case context::sslv23:
     handle_ = ::SSL_CTX_new(::TLS_method());
     break;
-  case context::tlsv1_client:
-  case context::tlsv11_client:
-  case context::tlsv12_client:
+  case context::sslv23_client:
     handle_ = ::SSL_CTX_new(::TLS_client_method());
     break;
+  case context::sslv23_server:
+    handle_ = ::SSL_CTX_new(::TLS_server_method());
+    break;
+  case context::tlsv1:
+    handle_ = ::SSL_CTX_new(::TLS_method());
+    SSL_CTX_set_min_proto_version(handle_, TLS1_VERSION);
+    SSL_CTX_set_max_proto_version(handle_, TLS1_VERSION);
+    break;
+  case context::tlsv1_client:
+    handle_ = ::SSL_CTX_new(::TLS_client_method());
+    SSL_CTX_set_min_proto_version(handle_, TLS1_VERSION);
+    SSL_CTX_set_max_proto_version(handle_, TLS1_VERSION);
+    break;
   case context::tlsv1_server:
+    handle_ = ::SSL_CTX_new(::TLS_server_method());
+    SSL_CTX_set_min_proto_version(handle_, TLS1_VERSION);
+    SSL_CTX_set_max_proto_version(handle_, TLS1_VERSION);
+    break;
+  case context::tlsv11:
+    handle_ = ::SSL_CTX_new(::TLS_method());
+    SSL_CTX_set_min_proto_version(handle_, TLS1_1_VERSION);
+    SSL_CTX_set_max_proto_version(handle_, TLS1_1_VERSION);
+    break;
+  case context::tlsv11_client:
+    handle_ = ::SSL_CTX_new(::TLS_client_method());
+    SSL_CTX_set_min_proto_version(handle_, TLS1_1_VERSION);
+    SSL_CTX_set_max_proto_version(handle_, TLS1_1_VERSION);
+    break;
   case context::tlsv11_server:
+    handle_ = ::SSL_CTX_new(::TLS_server_method());
+    SSL_CTX_set_min_proto_version(handle_, TLS1_1_VERSION);
+    SSL_CTX_set_max_proto_version(handle_, TLS1_1_VERSION);
+    break;
+  case context::tlsv12:
+    handle_ = ::SSL_CTX_new(::TLS_method());
+    SSL_CTX_set_min_proto_version(handle_, TLS1_2_VERSION);
+    SSL_CTX_set_max_proto_version(handle_, TLS1_2_VERSION);
+    break;
+  case context::tlsv12_client:
+    handle_ = ::SSL_CTX_new(::TLS_client_method());
+    SSL_CTX_set_min_proto_version(handle_, TLS1_2_VERSION);
+    SSL_CTX_set_max_proto_version(handle_, TLS1_2_VERSION);
+    break;
   case context::tlsv12_server:
     handle_ = ::SSL_CTX_new(::TLS_server_method());
+    SSL_CTX_set_min_proto_version(handle_, TLS1_2_VERSION);
+    SSL_CTX_set_max_proto_version(handle_, TLS1_2_VERSION);
     break;
 #endif // (OPENSSL_VERSION_NUMBER < 0x10100000L)
   default:
