@@ -83,7 +83,13 @@ public:
     tlsv12_client,
 
     /// TLS version 1.2 server.
-    tlsv12_server
+    tlsv12_server,
+
+    // Generic TLS aliases
+    tls        = sslv23,
+    tls_client = sslv23_client,
+    tls_server = sslv23_server
+
   };
 
   /// Bitmask type for SSL options.
